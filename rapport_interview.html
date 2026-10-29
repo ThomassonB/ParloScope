@@ -1,0 +1,349 @@
+<!doctype html>
+<!-- Les variables nommées sont remplacées par le script avec string.Template. -->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analyse de l’interview à 24:18</title>
+<style>
+:root {
+    font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+    color:#20334a;
+    background:#f3f5f8;
+    font-size:16px;
+}
+* {
+    box-sizing:border-box;
+}
+body {
+    margin:0;
+}
+main {
+    max-width:1100px;
+    margin:0 auto;
+    padding:48px 24px;
+}
+.eyebrow {
+    color:#46667e;
+    font-size:.8rem;
+    font-weight:700;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+}
+h1 {
+    font-size:clamp(1.8rem,4vw,2.6rem);
+    line-height:1.15;
+    margin:12px 0;
+}
+.intro {
+    color:#506177;
+    line-height:1.7;
+    margin-bottom:30px;
+}
+.cards {
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:14px;
+    margin:24px 0;
+}
+.card {
+    background:white;
+    border:1px solid #dce3eb;
+    border-radius:12px;
+    padding:22px 18px;
+}
+.card h2 {
+    font-size:.85rem;
+    color:#52677e;
+    font-weight:600;
+    margin:0 0 14px;
+}
+.value {
+    font-size:1.8rem;
+    font-weight:750;
+    margin:0;
+    letter-spacing:-.04em;
+}
+.detail {
+    font-size:.85rem;
+    line-height:1.5;
+    color:#58697c;
+    margin:10px 0 0;
+}
+.alert {
+    background:#fff3d7;
+    border-left:4px solid #bd7d16;
+    padding:14px 18px;
+    line-height:1.6;
+    border-radius:4px;
+}
+h2 {
+    font-size:1.25rem;
+    margin-top:36px;
+}
+.legend {
+    color:#52677e;
+    font-size:.9rem;
+    line-height:1.7;
+}
+.table-wrapper {
+    overflow-x:auto;
+    background:white;
+    border:1px solid #dce3eb;
+    border-radius:12px;
+}
+table {
+    border-collapse:collapse;
+    width:100%;
+    font-size:.92rem;
+    white-space:nowrap;
+}
+caption {
+    text-align:left;
+    padding:18px;
+    color:#52677e;
+    font-size:.88rem;
+}
+thead {
+    background:#253c54;
+    color:white;
+}
+th,td {
+    padding:14px 18px;
+    text-align:left;
+}
+tbody th {
+    font-weight:600;
+}
+tbody tr+tr {
+    border-top:1px solid #e8edf3;
+}
+tbody tr:nth-child(even) {
+    background:#f7f9fc;
+}
+.proportion {
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+meter {
+    width:100px;
+    height:16px;
+    accent-color:#237d79;
+}
+.proportion span {
+    min-width:65px;
+    text-align:right;
+    font-variant-numeric:tabular-nums;
+}
+.partial {
+    font-size:.75rem;
+    color:#52677e;
+    font-weight:400;
+    margin-left:6px;
+}
+.notes {
+    margin-top:32px;
+    border-top:1px solid #dce3eb;
+    padding-top:8px;
+}
+li {
+    line-height:1.7;
+    color:#526177;
+    margin:6px 0;
+}
+.checkpoint {
+    font-size:.85rem;
+    color:#526177;
+}
+@media(max-width:800px) {
+    .cards {
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+    main {
+        padding:28px 16px;
+    }
+}
+@media(max-width:430px) {
+    .cards {
+        grid-template-columns:1fr;
+    }
+    .value {
+        font-size:1.7rem;
+    }
+}
+@media print {
+    :root {
+        background:white;
+    }
+    main {
+        padding:0;
+        max-width:none;
+    }
+    .card {
+        break-inside:avoid;
+    }
+    tr {
+        break-inside:avoid;
+    }
+    thead {
+        display:table-header-group;
+    }
+    .table-wrapper {
+        overflow:visible;
+    }
+}
+.chart-card {
+    background: white;
+    border: 1px solid #dce3eb;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    break-inside: avoid;
+}
+.chart-card h2 {
+    margin: 0 0 8px;
+}
+.chart-description {
+    color: #52677e;
+    line-height: 1.6;
+    font-size: .9rem;
+}
+.chart-scroll {
+    overflow-x: auto;
+}
+.chart-scroll svg {
+    display: block;
+    width: 100%;
+    min-width: 650px;
+    height: auto;
+}
+@media print {
+    .chart-scroll { overflow: visible; }
+    .chart-scroll svg { min-width: 0; }
+}
+</style>
+</head>
+<body>
+<main>
+<div class="eyebrow">Analyse de l’interview</div>
+<h1>Statistiques jusqu’à 24:18</h1>
+<p class="intro">De 0:04 à 24:18 sur la vidéo. Interlude retranché : <strong>1:23</strong>.<br>Source : relevé d’horodatages et de cumuls fourni par l’utilisateur.</p>
+<section class="cards" aria-label="Statistiques principales">
+<article class="card">
+<h2>Durée hors interlude</h2>
+<p class="value">22:51</p>
+<p class="detail">Temps écoulé depuis 0:04, moins la partie écoulée de l’interlude.</p>
+</article>
+<article class="card">
+<h2>Interruptions par minute</h2>
+<p class="value">2,32</p>
+<p class="detail">53 interruptions cumulées. Moyenne sur la durée hors interlude.</p>
+</article>
+<article class="card">
+<h2>Temps de parole relevé</h2>
+<p class="value">11:58</p>
+<p class="detail">Somme des portions de parole avant l’horodatage saisi.</p>
+</article>
+<article class="card">
+<h2>Part du temps de parole</h2>
+<p class="value">52,37 %</p>
+<p class="detail">Temps de parole relevé divisé par la durée hors interlude.</p>
+</article>
+</section><p class="alert">Temps de parole incomplet : des intervalles de parole sont exclus du relevé.</p>
+<section class="chart-card"><h2>Présence de parole de la personne interviewée</h2><p class="chart-description">1 : un intervalle de parole est relevé ; 0 : aucun intervalle relevé. Les interludes sont grisés et la courbe y est interrompue.</p><div class="chart-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 300" role="img" aria-label="Présence de parole de la personne interviewée" style="font-family:Arial,sans-serif"><title>Présence de parole de la personne interviewée</title><desc>1 : un intervalle de parole est relevé ; 0 : aucun intervalle relevé. Les interludes sont grisés et la courbe y est interrompue.</desc><rect width="960" height="300" fill="white"/><line x1="65.00" y1="36" x2="65.00" y2="236" stroke="#e8edf3"/><text x="65.00" y="260.00" text-anchor="middle" fill="#52677e" font-size="13">0:04</text><line x1="241.09" y1="36" x2="241.09" y2="236" stroke="#e8edf3"/><text x="241.09" y="260.00" text-anchor="middle" fill="#52677e" font-size="13">5:00</text><line x1="419.57" y1="36" x2="419.57" y2="236" stroke="#e8edf3"/><text x="419.57" y="260.00" text-anchor="middle" fill="#52677e" font-size="13">10:00</text><line x1="598.04" y1="36" x2="598.04" y2="236" stroke="#e8edf3"/><text x="598.04" y="260.00" text-anchor="middle" fill="#52677e" font-size="13">15:00</text><line x1="776.51" y1="36" x2="776.51" y2="236" stroke="#e8edf3"/><text x="776.51" y="260.00" text-anchor="middle" fill="#52677e" font-size="13">20:00</text><line x1="930.00" y1="36" x2="930.00" y2="236" stroke="#e8edf3"/><text x="930.00" y="260.00" text-anchor="middle" fill="#52677e" font-size="13">24:18</text><text x="497.50" y="287.00" text-anchor="middle" fill="#52677e" font-size="13">Horodatage vidéo (min:s)</text><line x1="65" y1="236.00" x2="930" y2="236.00" stroke="#e0e7ef"/><text x="53.00" y="241.00" text-anchor="end" fill="#52677e" font-size="13">0</text><line x1="65" y1="36.00" x2="930" y2="36.00" stroke="#e0e7ef"/><text x="53.00" y="41.00" text-anchor="end" fill="#52677e" font-size="13">1</text><text x="65.00" y="18.00" text-anchor="start" fill="#52677e" font-size="13">Parole relevée (0 ou 1)</text><rect x="543.90" y="36" width="49.38" height="200" fill="#cbd5e1" opacity=".45"><title>Interlude exclu : 13:29 – 14:52</title></rect><path d="M 65.00 236.00 H 79.28 V 36.00 H 84.04 V 236.00 H 91.77 V 36.00 H 95.34 V 236.00 H 96.53 V 36.00 H 97.13 V 236.00 H 122.11 V 36.00 H 123.30 V 236.00 H 125.68 V 36.00 H 145.91 V 236.00 H 146.50 V 36.00 H 150.07 V 236.00 H 151.86 V 36.00 H 167.32 V 236.00 H 175.06 V 36.00 H 178.63 V 236.00 H 182.79 V 36.00 H 198.26 V 236.00 H 200.64 V 36.00 H 204.80 V 236.00 H 230.98 V 36.00 H 247.04 V 236.00 H 261.92 V 36.00 H 275.60 V 236.00 H 279.17 V 36.00 H 286.31 V 236.00 H 291.66 V 36.00 H 297.61 V 236.00 H 303.56 V 36.00 H 316.65 V 236.00 H 335.09 V 36.00 H 338.66 V 236.00 H 345.20 V 36.00 H 349.96 V 236.00 H 358.29 V 36.00 H 364.24 V 236.00 H 369.00 V 36.00 H 376.14 V 236.00 H 379.71 V 36.00 H 394.58 V 236.00 H 398.15 V 36.00 H 407.67 V 236.00 H 409.45 V 36.00 H 410.05 V 236.00 H 416.00 V 36.00 H 424.33 V 236.00 H 427.90 V 36.00 H 429.09 V 236.00 H 449.31 V 36.00 H 452.88 V 236.00 H 461.81 V 36.00 H 476.08 V 236.00 H 492.74 V 36.00 H 496.31 V 236.00 H 499.88 V 36.00 H 508.21 V 236.00 H 543.90" fill="none" stroke="#237d79" stroke-width="2" stroke-linejoin="round"/><path d="M 593.28 236.00 H 603.99 V 36.00 H 640.28 V 236.00 H 649.80 V 36.00 H 659.32 V 236.00 H 677.76 V 36.00 H 679.54 V 236.00 H 680.14 V 36.00 H 692.63 V 236.00 H 695.61 V 36.00 H 704.53 V 236.00 H 708.10 V 36.00 H 715.24 V 236.00 H 718.21 V 36.00 H 735.46 V 236.00 H 738.44 V 36.00 H 756.29 V 236.00 H 764.61 V 36.00 H 789.60 V 236.00 H 813.99 V 36.00 H 825.30 V 236.00 H 845.52 V 36.00 H 847.90 V 236.00 H 850.28 V 36.00 H 852.07 V 236.00 H 853.26 V 36.00 H 862.18 V 236.00 H 862.78 V 36.00 H 865.75 V 236.00 H 871.10 V 36.00 H 900.25 V 236.00 H 902.63 V 36.00 H 913.94 V 236.00 H 916.32 V 36.00 H 925.24 V 236.00 H 930.00" fill="none" stroke="#237d79" stroke-width="2" stroke-linejoin="round"/></svg></div></section>
+<section class="chart-card"><h2>Cumul des interruptions aux instants relevés</h2><p class="chart-description">Chaque point correspond à un cumul connu. Aucune courbe ne relie les points : les heures exactes des interruptions entre deux relevés sont inconnues.</p><div class="chart-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 300" role="img" aria-label="Cumul des interruptions aux instants relevés" style="font-family:Arial,sans-serif"><title>Cumul des interruptions aux instants relevés</title><desc>Chaque point correspond à un cumul connu. Aucune courbe ne relie les points : les heures exactes des interruptions entre deux relevés sont inconnues.</desc><rect width="960" height="300" fill="white"/><line x1="65.00" y1="36" x2="65.00" y2="236" stroke="#e8edf3"/><text x="65.00" y="260.00" text-anchor="middle" fill="#52677e" font-size="13">0:04</text><line x1="241.09" y1="36" x2="241.09" y2="236" stroke="#e8edf3"/><text x="241.09" y="260.00" text-anchor="middle" fill="#52677e" font-size="13">5:00</text><line x1="419.57" y1="36" x2="419.57" y2="236" stroke="#e8edf3"/><text x="419.57" y="260.00" text-anchor="middle" fill="#52677e" font-size="13">10:00</text><line x1="598.04" y1="36" x2="598.04" y2="236" stroke="#e8edf3"/><text x="598.04" y="260.00" text-anchor="middle" fill="#52677e" font-size="13">15:00</text><line x1="776.51" y1="36" x2="776.51" y2="236" stroke="#e8edf3"/><text x="776.51" y="260.00" text-anchor="middle" fill="#52677e" font-size="13">20:00</text><line x1="930.00" y1="36" x2="930.00" y2="236" stroke="#e8edf3"/><text x="930.00" y="260.00" text-anchor="middle" fill="#52677e" font-size="13">24:18</text><text x="497.50" y="287.00" text-anchor="middle" fill="#52677e" font-size="13">Horodatage vidéo (min:s)</text><line x1="65" y1="236.00" x2="930" y2="236.00" stroke="#e0e7ef"/><text x="53.00" y="241.00" text-anchor="end" fill="#52677e" font-size="13">0</text><line x1="65" y1="196.00" x2="930" y2="196.00" stroke="#e0e7ef"/><text x="53.00" y="201.00" text-anchor="end" fill="#52677e" font-size="13">11</text><line x1="65" y1="156.00" x2="930" y2="156.00" stroke="#e0e7ef"/><text x="53.00" y="161.00" text-anchor="end" fill="#52677e" font-size="13">22</text><line x1="65" y1="116.00" x2="930" y2="116.00" stroke="#e0e7ef"/><text x="53.00" y="121.00" text-anchor="end" fill="#52677e" font-size="13">33</text><line x1="65" y1="76.00" x2="930" y2="76.00" stroke="#e0e7ef"/><text x="53.00" y="81.00" text-anchor="end" fill="#52677e" font-size="13">44</text><line x1="65" y1="36.00" x2="930" y2="36.00" stroke="#e0e7ef"/><text x="53.00" y="41.00" text-anchor="end" fill="#52677e" font-size="13">55</text><text x="65.00" y="18.00" text-anchor="start" fill="#52677e" font-size="13">Interruptions cumulées</text><rect x="543.90" y="36" width="49.38" height="200" fill="#cbd5e1" opacity=".45"><title>Interlude exclu : 13:29 – 14:52</title></rect><circle cx="65.00" cy="236.00" r="5" fill="#405c94" stroke="white" stroke-width="1"><title>0:04 : 0 interruptions</title></circle><text x="73.00" y="226.00" text-anchor="start" fill="#314c80" font-size="13">0</text><circle cx="198.26" cy="192.36" r="5" fill="#405c94" stroke="white" stroke-width="1"><title>3:48 : 12 interruptions</title></circle><text x="206.26" y="182.36" text-anchor="start" fill="#314c80" font-size="13">12</text><circle cx="376.14" cy="159.64" r="5" fill="#405c94" stroke="white" stroke-width="1"><title>8:47 : 21 interruptions</title></circle><text x="384.14" y="149.64" text-anchor="start" fill="#314c80" font-size="13">21</text><circle cx="424.33" cy="141.45" r="5" fill="#405c94" stroke="white" stroke-width="1"><title>10:08 : 26 interruptions</title></circle><text x="432.33" y="131.45" text-anchor="start" fill="#314c80" font-size="13">26</text><circle cx="476.08" cy="123.27" r="5" fill="#405c94" stroke="white" stroke-width="1"><title>11:35 : 31 interruptions</title></circle><text x="484.08" y="113.27" text-anchor="start" fill="#314c80" font-size="13">31</text><circle cx="543.90" cy="105.09" r="5" fill="#405c94" stroke="white" stroke-width="1"><title>13:29 : 36 interruptions</title></circle><text x="551.90" y="95.09" text-anchor="start" fill="#314c80" font-size="13">36</text><circle cx="715.24" cy="79.64" r="5" fill="#405c94" stroke="white" stroke-width="1"><title>18:17 : 43 interruptions</title></circle><text x="723.24" y="69.64" text-anchor="start" fill="#314c80" font-size="13">43</text><circle cx="865.75" cy="50.55" r="5" fill="#405c94" stroke="white" stroke-width="1"><title>22:30 : 51 interruptions</title></circle><text x="873.75" y="40.55" text-anchor="start" fill="#314c80" font-size="13">51</text><circle cx="913.94" cy="43.27" r="5" fill="#405c94" stroke="white" stroke-width="1"><title>23:51 : 53 interruptions</title></circle><text x="905.94" y="33.27" text-anchor="end" fill="#314c80" font-size="13">53</text><circle cx="930.00" cy="43.27" r="5" fill="#405c94" stroke="white" stroke-width="1"><title>24:18 : 53 interruptions</title></circle><text x="938.00" y="33.27" text-anchor="start" fill="#314c80" font-size="13">53</text></svg></div></section>
+<section class="chart-card"><h2>Distribution des durées de prise de parole</h2><p class="chart-description">45 intervalles de parole inclus avant la limite choisie. Un intervalle traversant un interlude est découpé ; celui traversant la limite est tronqué. Chaque classe inclut sa borne gauche et exclut sa borne droite.</p><div class="chart-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 300" role="img" aria-label="Distribution des durées de prise de parole" style="font-family:Arial,sans-serif"><title>Distribution des durées de prise de parole</title><desc>45 intervalles de parole inclus avant la limite choisie. Un intervalle traversant un interlude est découpé ; celui traversant la limite est tronqué. Chaque classe inclut sa borne gauche et exclut sa borne droite.</desc><rect width="960" height="300" fill="white"/><line x1="65" y1="236.00" x2="930" y2="236.00" stroke="#e0e7ef"/><text x="53.00" y="241.00" text-anchor="end" fill="#52677e" font-size="13">0</text><line x1="65" y1="196.00" x2="930" y2="196.00" stroke="#e0e7ef"/><text x="53.00" y="201.00" text-anchor="end" fill="#52677e" font-size="13">4</text><line x1="65" y1="156.00" x2="930" y2="156.00" stroke="#e0e7ef"/><text x="53.00" y="161.00" text-anchor="end" fill="#52677e" font-size="13">8</text><line x1="65" y1="116.00" x2="930" y2="116.00" stroke="#e0e7ef"/><text x="53.00" y="121.00" text-anchor="end" fill="#52677e" font-size="13">12</text><line x1="65" y1="76.00" x2="930" y2="76.00" stroke="#e0e7ef"/><text x="53.00" y="81.00" text-anchor="end" fill="#52677e" font-size="13">16</text><line x1="65" y1="36.00" x2="930" y2="36.00" stroke="#e0e7ef"/><text x="53.00" y="41.00" text-anchor="end" fill="#52677e" font-size="13">20</text><text x="65.00" y="18.00" text-anchor="start" fill="#52677e" font-size="13">Nombre d’intervalles</text><rect x="67.00" y="66.00" width="119.57" height="170.00" fill="#237d79"><title>De 0 s inclus à 10 s exclu : 17 intervalles</title></rect><text x="126.79" y="260.00" text-anchor="middle" fill="#52677e" font-size="13">0–10</text><text x="126.79" y="58.00" text-anchor="middle" fill="#52677e" font-size="13">17</text><rect x="190.57" y="96.00" width="119.57" height="140.00" fill="#237d79"><title>De 10 s inclus à 20 s exclu : 14 intervalles</title></rect><text x="250.36" y="260.00" text-anchor="middle" fill="#52677e" font-size="13">10–20</text><text x="250.36" y="88.00" text-anchor="middle" fill="#52677e" font-size="13">14</text><rect x="314.14" y="146.00" width="119.57" height="90.00" fill="#237d79"><title>De 20 s inclus à 30 s exclu : 9 intervalles</title></rect><text x="373.93" y="260.00" text-anchor="middle" fill="#52677e" font-size="13">20–30</text><text x="373.93" y="138.00" text-anchor="middle" fill="#52677e" font-size="13">9</text><rect x="437.71" y="216.00" width="119.57" height="20.00" fill="#237d79"><title>De 30 s inclus à 40 s exclu : 2 intervalles</title></rect><text x="497.50" y="260.00" text-anchor="middle" fill="#52677e" font-size="13">30–40</text><text x="497.50" y="208.00" text-anchor="middle" fill="#52677e" font-size="13">2</text><rect x="561.29" y="216.00" width="119.57" height="20.00" fill="#237d79"><title>De 40 s inclus à 50 s exclu : 2 intervalles</title></rect><text x="621.07" y="260.00" text-anchor="middle" fill="#52677e" font-size="13">40–50</text><text x="621.07" y="208.00" text-anchor="middle" fill="#52677e" font-size="13">2</text><rect x="684.86" y="236.00" width="119.57" height="0.00" fill="#237d79"><title>De 50 s inclus à 60 s exclu : 0 intervalles</title></rect><text x="744.64" y="260.00" text-anchor="middle" fill="#52677e" font-size="13">50–60</text><rect x="808.43" y="226.00" width="119.57" height="10.00" fill="#237d79"><title>De 60 s inclus à 70 s exclu : 1 intervalles</title></rect><text x="868.21" y="260.00" text-anchor="middle" fill="#52677e" font-size="13">60–70</text><text x="868.21" y="218.00" text-anchor="middle" fill="#52677e" font-size="13">1</text><text x="497.50" y="287.00" text-anchor="middle" fill="#52677e" font-size="13">Durée d’un intervalle de parole (secondes)</text></svg></div></section>
+<h2>Temps de parole pour chaque minute d’interview</h2>
+<p class="legend">Chaque ligne mesure les secondes parlées pendant cette minute effective, depuis le début à 0:04 et en retirant l’interlude. La dernière minute n’est pas extrapolée.</p>
+<div class="table-wrapper">
+<table>
+<caption>Temps effectif : 0:00 désigne le début de l’interview, à 0:04 sur la vidéo.</caption>
+<thead>
+<tr>
+<th scope="col">Minute</th>
+<th scope="col">Intervalle effectif</th>
+<th scope="col">Parole</th>
+<th scope="col">Part de parole</th>
+</tr>
+</thead>
+<tbody><tr><th scope="row">1</th>
+<td>0:00 – 1:00</td>
+<td><strong>15 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="25.00000000" aria-label="Part du temps de parole, minute 1"></meter><span>25,00 %</span></div></td></tr><tr><th scope="row">2</th>
+<td>1:00 – 2:00</td>
+<td><strong>20 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="33.33333333" aria-label="Part du temps de parole, minute 2"></meter><span>33,33 %</span></div></td></tr><tr><th scope="row">3</th>
+<td>2:00 – 3:00</td>
+<td><strong>48 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="80.00000000" aria-label="Part du temps de parole, minute 3"></meter><span>80,00 %</span></div></td></tr><tr><th scope="row">4</th>
+<td>3:00 – 4:00</td>
+<td><strong>39 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="65.00000000" aria-label="Part du temps de parole, minute 4"></meter><span>65,00 %</span></div></td></tr><tr><th scope="row">5</th>
+<td>4:00 – 5:00</td>
+<td><strong>21 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="35.00000000" aria-label="Part du temps de parole, minute 5"></meter><span>35,00 %</span></div></td></tr><tr><th scope="row">6</th>
+<td>5:00 – 6:00</td>
+<td><strong>29 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="48.33333333" aria-label="Part du temps de parole, minute 6"></meter><span>48,33 %</span></div></td></tr><tr><th scope="row">7</th>
+<td>6:00 – 7:00</td>
+<td><strong>41 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="68.33333333" aria-label="Part du temps de parole, minute 7"></meter><span>68,33 %</span></div></td></tr><tr><th scope="row">8</th>
+<td>7:00 – 8:00</td>
+<td><strong>17 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="28.33333333" aria-label="Part du temps de parole, minute 8"></meter><span>28,33 %</span></div></td></tr><tr><th scope="row">9</th>
+<td>8:00 – 9:00</td>
+<td><strong>33 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="55.00000000" aria-label="Part du temps de parole, minute 9"></meter><span>55,00 %</span></div></td></tr><tr><th scope="row">10</th>
+<td>9:00 – 10:00</td>
+<td><strong>41 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="68.33333333" aria-label="Part du temps de parole, minute 10"></meter><span>68,33 %</span></div></td></tr><tr><th scope="row">11</th>
+<td>10:00 – 11:00</td>
+<td><strong>12 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="20.00000000" aria-label="Part du temps de parole, minute 11"></meter><span>20,00 %</span></div></td></tr><tr><th scope="row">12</th>
+<td>11:00 – 12:00</td>
+<td><strong>25 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="41.66666667" aria-label="Part du temps de parole, minute 12"></meter><span>41,67 %</span></div></td></tr><tr><th scope="row">13</th>
+<td>12:00 – 13:00</td>
+<td><strong>19 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="31.66666667" aria-label="Part du temps de parole, minute 13"></meter><span>31,67 %</span></div></td></tr><tr><th scope="row">14</th>
+<td>13:00 – 14:00</td>
+<td><strong>17 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="28.33333333" aria-label="Part du temps de parole, minute 14"></meter><span>28,33 %</span></div></td></tr><tr><th scope="row">15</th>
+<td>14:00 – 15:00</td>
+<td><strong>44 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="73.33333333" aria-label="Part du temps de parole, minute 15"></meter><span>73,33 %</span></div></td></tr><tr><th scope="row">16</th>
+<td>15:00 – 16:00</td>
+<td><strong>28 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="46.66666667" aria-label="Part du temps de parole, minute 16"></meter><span>46,67 %</span></div></td></tr><tr><th scope="row">17</th>
+<td>16:00 – 17:00</td>
+<td><strong>44 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="73.33333333" aria-label="Part du temps de parole, minute 17"></meter><span>73,33 %</span></div></td></tr><tr><th scope="row">18</th>
+<td>17:00 – 18:00</td>
+<td><strong>54 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="90.00000000" aria-label="Part du temps de parole, minute 18"></meter><span>90,00 %</span></div></td></tr><tr><th scope="row">19</th>
+<td>18:00 – 19:00</td>
+<td><strong>42 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="70.00000000" aria-label="Part du temps de parole, minute 19"></meter><span>70,00 %</span></div></td></tr><tr><th scope="row">20</th>
+<td>19:00 – 20:00</td>
+<td><strong>19 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="31.66666667" aria-label="Part du temps de parole, minute 20"></meter><span>31,67 %</span></div></td></tr><tr><th scope="row">21</th>
+<td>20:00 – 21:00</td>
+<td><strong>24 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="40.00000000" aria-label="Part du temps de parole, minute 21"></meter><span>40,00 %</span></div></td></tr><tr><th scope="row">22</th>
+<td>21:00 – 22:00</td>
+<td><strong>51 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="85.00000000" aria-label="Part du temps de parole, minute 22"></meter><span>85,00 %</span></div></td></tr><tr><th scope="row">23 <span class="partial">partielle</span></th>
+<td>22:00 – 22:51</td>
+<td><strong>35 s</strong></td>
+<td><div class="proportion"><meter min="0" max="100" value="68.62745098" aria-label="Part du temps de parole, minute 23"></meter><span>68,63 %</span></div></td></tr></tbody>
+</table>
+</div>
+<section class="notes">
+<h2>Précisions sur le calcul</h2>
+<ul><li>Cumuls placés à la fin des intervalles par convention ; le cumul de 36 est placé au début de l’interlude, à 13:29.</li><li>Le cumul initial de zéro correspond au comptage depuis le début de l’interview.</li><li>Les minutes commencent à 0:04 et excluent les interludes. La dernière peut être partielle.</li><li>Parole exclue du calcul : 10:58 – 10:06. Fin antérieure au début : corriger la fin après vérification, puis passer include à true.</li></ul>
+<p class="checkpoint">Dernier cumul connu : 53 à 24:18. Cumul suivant ou au même instant : 53 à 24:18.</p>
+</section>
+</main>
+</body>
+</html>

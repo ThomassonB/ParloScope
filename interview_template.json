@@ -1,0 +1,19 @@
+{
+  "title": "Interview de démonstration",
+  "target_speaker": "guest",
+  "interview": {"start": "0:00", "end": "10:00"},
+  "excluded_intervals": [
+    {"start": "1:00", "end": "1:10", "note": "Pause"}
+  ],
+  "speech_intervals": [
+    {"speaker": "guest", "start": "0:10", "end": "0:35"},
+    {"speaker": "host", "start": "0:30", "end": "0:45"},
+    {"speaker": "guest", "start": "1:20", "end": "1:50", "include": true, "note": "Ceci est une note."}
+  ],
+  "interruption_counts": [
+    {"time": "0:00", "count": 0},
+    {"time": "0:35", "count": 1},
+    {"time": "10:00", "count": 2}
+  ],
+  "notes": ["Une interruption correspond ici à une coupure de parole relevée manuellement."]
+}
