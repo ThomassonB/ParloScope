@@ -7,13 +7,13 @@ Python 3, sans dépendance supplémentaire.
 ### Arguments
 
 ```bash
-python analyse_interview.py <input_file> [timestamp] -o [output_file]
+python analyse_interview.py <input_file> [endpoint] -o [output_file]
 ```
 
 | Argument ou option | Description |
 |---|---|
 | `<input_file>` | Chemin du fichier JSON contenant les données de l’interview (obligatoire). |
-| `[timestamp]` | Horodatage vidéo jusqu’auquel calculer les statistiques, au format `M:SS` ou `H:MM:SS`. Facultatif : sans cette valeur, toute l’interview est analysée. |
+| `[endpoint]` | Horodatage vidéo jusqu’auquel calculer les statistiques, au format `M:SS` ou `H:MM:SS`. Facultatif : sans cette valeur, toute l’interview est analysée. |
 | `-o [output_file]`, `--output [output_file]` | Génère le rapport HTML au chemin indiqué. Si l’option est absente ou fournie sans chemin, utilise `rapport_interview.html` dans le dossier courant. |
 
 Les éléments entre `<.>` sont à remplacer par vos valeurs. Les éléments entre `[.]` sont facultatifs. Ces délimiteurs ne doivent pas être saisis.
