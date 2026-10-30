@@ -112,20 +112,20 @@ class InterruptionCheckpoint(NamedTuple):
 
 class JsonFields:
     name = "Fichier en entrée"
-    REQUIRED = set('interview', 'target_speaker', 'excluded_intervals', 'speech_intervals', 'interruption_counts')
-    OPTIONAL = set('title', 'notes')
+    REQUIRED = set(('interview', 'target_speaker', 'excluded_intervals', 'speech_intervals', 'interruption_counts',))
+    OPTIONAL = set(('title', 'notes',))
 
 class Interview:
     name = "interview"
     subtype = dict
-    REQUIRED = set('start', 'end')
+    REQUIRED = set(('start', 'end',))
     OPTIONAL = set()
 
 class ExcludedIntervals:
     name = "excluded_intervals"
     subtype = dict
-    REQUIRED = set('start', 'end')
-    OPTIONAL = set('note')
+    REQUIRED = set(('start', 'end',))
+    OPTIONAL = set(('note',))
 
     @classmethod
     def process_timecode(self, data, line, output: list, interview_interval: Interval):
@@ -144,8 +144,8 @@ class ExcludedIntervals:
 class SpeechIntervals:
     name = "speech_intervals"
     subtype = dict
-    REQUIRED = set('start', 'end', 'speaker')
-    OPTIONAL = set('include', 'note')
+    REQUIRED = set(('start', 'end', 'speaker',))
+    OPTIONAL = set(('include', 'note',))
 
     @classmethod
     def process_timecode(self, data, line, output: dict, interview_interval: Interval):
@@ -172,8 +172,8 @@ class SpeechIntervals:
 class InterruptionCounts:
     name = "interruption_counts"
     subtype = dict
-    REQUIRED = set('time', 'count')
-    OPTIONAL = set('note')
+    REQUIRED = set(('time', 'count',))
+    OPTIONAL = set(('note',))
 
     @classmethod
     def process_timecode(self, data, line, output: list, interview_interval: Interval):
@@ -249,19 +249,19 @@ def validate_interview(data):
         for index, interval in enumerate(data[field.name]):
             field.process_timecode(interval, line=index, output=output, interview_interval=tot_interval)
 
-    checkpoints.sort()
-    if len(checkpoints) < 2 or checkpoints[0] != (start, 0) or checkpoints[-1][0] != end:
-        raise ValueError('interruption_counts : renseigner zéro au début et le cumul total à la fin.')
+    #checkpoints.sort()
+    #if len(checkpoints) < 2 or checkpoints[0] != (start, 0) or checkpoints[-1][0] != end:
+    #    raise ValueError('interruption_counts : renseigner zéro au début et le cumul total à la fin.')
     
-    for previous, following in zip(checkpoints, checkpoints[1:]):
-        if previous[0] == following[0] or previous[1] > following[1]:
-            raise ValueError('interruption_counts : horodatages uniques et cumuls croissants ou égaux requis.')
+    #for previous, following in zip(checkpoints, checkpoints[1:]):
+    #    if previous[0] == following[0] or previous[1] > following[1]:
+    #        raise ValueError('interruption_counts : horodatages uniques et cumuls croissants ou égaux requis.')
         
     return data
 
 def main():
-    from .analyse import analyze
-    from .out_html import generate_html
+    from analyse import analyze
+    from out_html import generate_html
 
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('input_file', help="Fichier de données JSON")

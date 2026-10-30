@@ -1,5 +1,5 @@
-from .read_interview import Interval, TimeStamp, InterruptionCheckpoint
-from .read_interview import Interview, ExcludedIntervals, SpeechIntervals, InterruptionCounts, Notes
+from read_interview import Interval, TimeStamp, InterruptionCheckpoint
+from read_interview import Interview, ExcludedIntervals, SpeechIntervals, InterruptionCounts, Notes
 
 from itertools import product
 
@@ -94,7 +94,7 @@ def build_effective_timeline(segments, speech) -> tuple[list[Interval], Interval
 
 def interruption_checkpoints(data) -> list[InterruptionCheckpoint]:
     return sorted(InterruptionCheckpoint(TimeStamp(item['time']), item['count'])
-                    for item in data[InterruptionCounts])
+                    for item in data[InterruptionCounts.name])
 
 
 def interruption_bounds(checkpoints, time):
@@ -105,7 +105,7 @@ def interruption_bounds(checkpoints, time):
 
 def overlap_duration(first: Interval, second: Interval) -> TimeStamp:
     intersection = first.intersection(second)
-    return intersection.duration() if intersection is not None else 0
+    return intersection.duration() if intersection is not None else None
 
 
 def calculate_minute_statistics(speech: list[Interval], interview_duration: Interval):
@@ -117,15 +117,15 @@ def calculate_minute_statistics(speech: list[Interval], interview_duration: Inte
             TimeStamp.from_seconds(min(start + 60, interview_duration.end.time))
             )
         
-        spoken = sum(overlap_duration(window, interval) for interval in speech)
+        spoken = sum(overlap for interval in speech if (overlap:=overlap_duration(window, interval) is not None))
 
         minutes.append({
             'minute': start // 60 + 1,
             'effective_start': window.start.format_duration(),
             'effective_end': window.end.format_duration(),
-            'observed_duration_seconds': window.duration(),
-            'speech_seconds': spoken.time,
-            'speech_percentage': 100 * spoken.time / window.duration().time,
+            'observed_duration_seconds': window.duration().time,
+            'speech_seconds': spoken,
+            'speech_percentage': 100 * spoken / window.duration().time,
         })
     return minutes
 
@@ -183,16 +183,16 @@ def build_analysis_result(data, interview, analysis, duration, effective_speech,
         'video_timestamp': analysis.end.format_duration(),
         'video_start': interview.start.format_duration(),
         'interview_video_end': interview.end.format_duration(),
-        'excluded_interlude_seconds': (analysis.duration() - duration.end).time,
-        'interview_duration_seconds': duration.end.time,
+        'excluded_interlude': (analysis.duration() - duration.end).format_duration(),
+        'interview_duration': duration.end.format_duration(),
         'minimum_interruptions': previous.count, 
         'maximum_interruptions': following.count,
         'previous_checkpoint': {'timestamp': previous.time.format_duration(), 
                                 'count': previous.count},
         'following_checkpoint': {'timestamp': following.time.format_duration(), 
                                  'count': following.count},
-        'minimum_interruptions_per_minute': previous.count * 60 / duration if duration > 0 else None,
-        'maximum_interruptions_per_minute': following.count * 60 / duration if duration > 0 else None,
+        'minimum_interruptions_per_minute': previous.count * 60 / duration.end.time if duration.end.time > 0 else None,
+        'maximum_interruptions_per_minute': following.count * 60 / duration.end.time if duration.end.time > 0 else None,
         'total_speech_seconds': total_speech,
         'speech_percentage': 100 * total_speech / duration.end.time if duration.end.time > 0 else None,
         'speech_by_minute': minutes, 

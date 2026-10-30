@@ -2,7 +2,7 @@ from html import escape
 from string import Template
 from pathlib import Path
 
-from .interview_charts import render_charts
+from interview_charts import render_charts
 
 def generate_html(result):
 
@@ -45,8 +45,8 @@ def generate_html(result):
             title=escape(result['title']),
             video_timestamp=result['video_timestamp'],
             video_start=result['video_start'],
-            excluded_interlude=result['excluded_interlude_seconds'],
-            interview_duration=result['interview_duration_seconds'],
+            excluded_interlude=result['excluded_interlude'],
+            interview_duration=result['interview_duration'],
             total_speech=result['total_speech_seconds'],
             rate=rate, 
             count=count, 
