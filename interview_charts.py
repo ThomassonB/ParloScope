@@ -65,10 +65,10 @@ def excluded_shading(parts, segments, x):
 
 def speech_chart(data):
     title = 'Présence de parole de la personne interviewée'
-    description = '1 : un intervalle de parole est relevé ; 0 : aucun intervalle relevé. Les interludes sont grisés et la courbe y est interrompue.'
+    description = '1 : le locuteur parle ; 0 : ne parle pas. Les pauses sont grisées.'
     parts = svg_start(title, description)
     x = time_axis(parts, data['video_start_seconds'], data['video_end_seconds'])
-    y = y_axis(parts, 1, [0, 1], 'Parole relevée (0 ou 1)')
+    y = y_axis(parts, 1, [0, 1], 'Temps de parole')
     excluded_shading(parts, data['excluded_segments'], x)
     for segment in data['included_segments']:
         start, end = segment['start'], segment['end']
@@ -88,7 +88,7 @@ def speech_chart(data):
 
 def interruptions_chart(data):
     title = 'Cumul des interruptions aux instants relevés'
-    description = 'Chaque point correspond à un cumul connu. Aucune courbe ne relie les points : les heures exactes des interruptions entre deux relevés sont inconnues.'
+    description = 'Chaque point correspond à un cumul renseigné'
     points = data['interruption_checkpoints']
     maximum = max([item['count'] for item in points] + [1])
     tick_step = max(1, ceil(maximum / 5))
@@ -123,7 +123,7 @@ def distribution_chart(data):
     title = 'Distribution des durées de prise de parole'
     durations = data['speech_durations_seconds']
     bins = histogram_bins(durations)
-    description = f'{len(durations)} intervalles de parole inclus avant la limite choisie. Un intervalle traversant un interlude est découpé ; celui traversant la limite est tronqué. Chaque classe inclut sa borne gauche et exclut sa borne droite.'
+    description = f'{len(durations)} intervalles de parole au total.'
     parts = svg_start(title, description)
     maximum = max([item['count'] for item in bins] + [1])
     step = max(1, ceil(maximum / 5))

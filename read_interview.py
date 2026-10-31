@@ -65,6 +65,11 @@ class TimeStamp:
             return NotImplemented
         return TimeStamp.from_seconds(self.time + other.time)
 
+    def __radd__(self, other): # for sum(TimeStamp)
+        if not isinstance(other, int) or other != 0:
+            return NotImplemented
+        return self
+
     def __lt__(self, other):
         if not isinstance(other, TimeStamp):
             return NotImplemented
