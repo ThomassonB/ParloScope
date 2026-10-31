@@ -88,7 +88,7 @@ Renseigner obligatoirement un cumul de `0` au temps associé à `interview.start
 
 ### Ligne incertaine ou incorrecte
 
-Votre fichier conserve l’intervalle initial erroné sans le compter :
+Le script conserve l’intervalle initial erroné sans le compter. Dans le champs `speech_intervals`, vous pouvez retirer un horodotage du calcul :
 
 ```json
 {
