@@ -29,7 +29,7 @@ L’analyse humaine reste à mon sens nécessaire pour appliquer ces critères. 
 ### Arguments
 
 ```bash
-python analyse_interview.py <input_file> [endpoint] [-o <output_file>]
+python read_interview.py <input_file> [endpoint] [-o <output_file>]
 ```
 
 | Argument ou option | Description |
@@ -45,13 +45,13 @@ Les éléments entre `<.>` sont à remplacer par vos valeurs. Les éléments ent
 Pour analyser l’interview jusqu’à l’horodatage vidéo `12:00` et enregistrer le rapport HTML :
 
 ```bash
-python analyse_interview.py interview_francetv_marie_dupont.json 12:00 -o rapport_francetv_marie_dupont.html
+python read_interview.py interview_francetv_marie_dupont.json 12:00 -o rapport_francetv_marie_dupont.html
 ```
 
 Version simplifiée : 
 
 ```bash
-python analyse_interview.py interview_francetv_marie_dupont.json
+python read_interview.py interview_francetv_marie_dupont.json
 ```
 Vous trouverez le compte rendu dans `rapport_parloscope.html`
 
