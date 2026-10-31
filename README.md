@@ -1,36 +1,63 @@
 # Analyse d’interview depuis un fichier JSON
 
-Python 3, sans dépendance supplémentaire.
+Un outil écrit en Python pour mesurer le temps de parole, les interruptions et leur évolution pendant une interview, une réunion ou un débat. Python 3, sans dépendance supplémentaire. Le rendu HTML/CSS et les graphiques SVG ont été codés par IA.
+
+## Méthodologie
+
+- **Temps de parole** : sont comptabilisés les intervalles pendant lesquels le locuteur parle, sans être interrompu et sans qu’une autre personne parle par-dessus. Il s’agit de son temps d’expression sans interférence.
+
+- **Interruptions** : sont comptabilisées les interventions qui coupent le propos de la personne interviewée de manière agressive ou insistante, en l’empêchant de terminer une idée ou de répondre à une question, ou en imposant un changement de sujet. Les brèves demandes de précision, d’environ une à deux secondes, ne sont pas comptabilisées lorsqu’elles portent directement sur le propos : demande de définition, de chiffres, de source ou de contexte.
+
+### Pourquoi ne pas automatiser entièrement la détection des temps de parole et des interruptions ?
+
+Une interruption peut remplir des fonctions différentes :
+
+- **Clarifier une information** : demander brièvement la source d’un chiffre ou la définition d’un terme, puis laisser la personne poursuivre son explication.
+- **Couper le propos** : commenter, poser une nouvelle question ou multiplier les interventions vocales de façon à empêcher la personne de poursuivre son raisonnement.
+
+Un outil automatique peut repérer les changements de locuteur et les chevauchements de voix. Cela ne permet pas forcémeent de distinguer une demande de clarification d’une intervention qui coupe le propos. Cette distinction nécessite le contexte du débat.
+
+L’analyse humaine reste à mon sens nécessaire pour appliquer ces critères. Publier les horodatages permet à chacun de réécouter les passages concernés, de vérifier le décompte et l'honnêteté du relevé.
+
+### Mesures
+
+- À partir d’une vidéo ou d'un podcast : utilisez les horodatages du lecteur pour relever les prises de parole et les interruptions.
+- En réunion, sans enregistrement : utilisez un chronomètre et notez les horodatages dans un carnet. Cette méthode demande d'être réactif pour suivre les échanges tendus.
 
 ## Utilisation
 
 ### Arguments
 
 ```bash
-python analyse_interview.py <input_file> [endpoint] -o [output_file]
+python analyse_interview.py <input_file> [endpoint] [-o <output_file>]
 ```
 
 | Argument ou option | Description |
 |---|---|
 | `<input_file>` | Chemin du fichier JSON contenant les données de l’interview (obligatoire). |
 | `[endpoint]` | Horodatage vidéo jusqu’auquel calculer les statistiques, au format `M:SS` ou `H:MM:SS`. Facultatif : sans cette valeur, toute l’interview est analysée. |
-| `-o [output_file]`, `--output [output_file]` | Génère le rapport HTML au chemin indiqué. Si l’option est absente ou fournie sans chemin, utilise `rapport_interview.html` dans le dossier courant. |
+| `-o [output_file]`, `--output [output_file]` | Génère le rapport HTML au chemin indiqué. Si l’option est absente ou fournie sans chemin, utilise `rapport_parloscope.html` dans le dossier courant. |
 
 Les éléments entre `<.>` sont à remplacer par vos valeurs. Les éléments entre `[.]` sont facultatifs. Ces délimiteurs ne doivent pas être saisis.
-
-Les options `--html`, `--json` et `--text` sont mutuellement exclusives. Par défaut, le script génère un `html`.
 
 ### Exemple
 
 Pour analyser l’interview jusqu’à l’horodatage vidéo `12:00` et enregistrer le rapport HTML :
 
 ```bash
-python analyse_interview.py interview_francetv_marie_dupont.json 12:00 --html rapport_francetv_marie_dupont.html
+python analyse_interview.py interview_francetv_marie_dupont.json 12:00 -o rapport_francetv_marie_dupont.html
 ```
+
+Version simplifiée : 
+
+```bash
+python analyse_interview.py interview_francetv_marie_dupont.json
+```
+Vous trouverez le compte rendu dans `rapport_parloscope.html`
 
 ## Format JSON d’entrée
 
-Vous pouvez trouver un exemple minimal dans interview_template.json.
+Vous pouvez trouver un exemple minimal dans interview_template.json. Ce fichier représente votre relevé d'horodotage. Si vous avez noté sur un carnet, vous pouvez reporter votre horodotage dans ce fichier.
 
 ### Description des champs du json
 
@@ -56,7 +83,7 @@ Vous pouvez trouver un exemple minimal dans interview_template.json.
 
 ### Cumuls d’interruptions
 
-Renseigner obligatoirement un cumul de `0` àau temps associé à `interview.start` et le total à `interview.end`. Les autres points sont facultatifs. Les horodatages doivent être uniques ; les cumuls sont des entiers positifs ou nuls et ne peuvent pas diminuer. Idéalement il faudrait relever tous les instants où une interruption se passe pour vérifier la comptabilité. Comme certaines interview peuvent être une purge à écouter, on peut compter les interruptions et relever leur nombre cumulé à un instant donné.
+Renseigner obligatoirement un cumul de `0` au temps associé à `interview.start` et le total à `interview.end`. Les autres points sont facultatifs. Les horodatages doivent être uniques ; les cumuls sont des entiers positifs ou nuls en ordre croissant. Idéalement il faudrait relever tous les instants où une interruption se passe pour vérifier la comptabilité. Comme certaines interview peuvent être une purge à écouter, on peut compter les interruptions et relever leur nombre cumulé à un instant donné.
 
 
 ### Ligne incertaine ou incorrecte
@@ -73,4 +100,4 @@ Votre fichier conserve l’intervalle initial erroné sans le compter :
 }
 ```
 
-Corrigez `end`, puis passez `include` à `true` après vérification. Une ligne exclue doit garder des horodatages syntaxiquement valides, mais peut conserver une fin antérieure au début. Elle est signalée dans le rapport si son début précède l’instant analysé.
+Corrigez le champs `end`, puis passez `include` à `true` après vérification. Une ligne exclue doit garder des horodatages syntaxiquement valides, mais peut conserver une fin antérieure au début. Elle est signalée dans le rapport si son début précède l’instant analysé.

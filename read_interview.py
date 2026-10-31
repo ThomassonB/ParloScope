@@ -46,8 +46,6 @@ class TimeStamp:
             self.time *= 60
             self.time += component
         
-        self.text = text
-
     @classmethod
     def from_seconds(cls, seconds) -> 'TimeStamp':
         if type(seconds) is not int or seconds < 0:
@@ -55,7 +53,6 @@ class TimeStamp:
         
         instance = object.__new__(cls)
         object.__setattr__(instance, 'time', seconds)
-        object.__setattr__(instance, 'text', instance.format_duration())
         return instance
 
     def __sub__(self, other):
@@ -266,7 +263,7 @@ def main():
         result = analyze(data, args.timestamp)
 
         
-        output_path = Path(args.output or 'rapport_interview.html').expanduser()
+        output_path = Path(args.output or 'rapport_parloscope.html').expanduser()
 
         if output_path.resolve() == Path(args.input_file).expanduser().resolve():
             raise ValueError("Le rapport ne doit pas écraser le fichier d’entrée.")
