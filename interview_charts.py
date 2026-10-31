@@ -1,5 +1,3 @@
-"""Graphiques SVG autonomes : aucun téléchargement ni dépendance supplémentaire."""
-
 from html import escape
 from math import ceil
 

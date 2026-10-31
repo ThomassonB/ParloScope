@@ -105,7 +105,7 @@ def interruption_bounds(checkpoints, time):
 
 def overlap_duration(first: Interval, second: Interval) -> TimeStamp:
     intersection = first.intersection(second)
-    return intersection.duration() if intersection is not None else None
+    return intersection.duration() if intersection is not None else TimeStamp.from_seconds(0)
 
 
 def calculate_minute_statistics(speech: list[Interval], interview_duration: Interval):
@@ -117,12 +117,12 @@ def calculate_minute_statistics(speech: list[Interval], interview_duration: Inte
             TimeStamp.from_seconds(min(start + 60, interview_duration.end.time))
             )
         
-        spoken = sum(overlap for interval in speech if (overlap:=overlap_duration(window, interval) is not None))
+        spoken = sum(overlap_duration(window, interval).time for interval in speech)
 
         minutes.append({
             'minute': start // 60 + 1,
-            'effective_start': window.start.format_duration(),
-            'effective_end': window.end.format_duration(),
+            #'effective_start': window.start.format_duration(),
+            #'effective_end': window.end.format_duration(),
             'observed_duration_seconds': window.duration().time,
             'speech_seconds': spoken,
             'speech_percentage': 100 * spoken / window.duration().time,

@@ -19,16 +19,16 @@ def generate_html(result):
 
     for m in result['speech_by_minute']:
         partial = ' <span class="partial">partielle</span>' if m['observed_duration_seconds'] < 60 else ''
+        # <td>{m['effective_start']} – {m['effective_end']}</td>
         rows.append(
             f'''
             <tr>
             <th scope="row">{m['minute']}{partial}</th>
-            <td>{m['effective_start']} – {m['effective_end']}</td>
             <td><strong>{m['speech_seconds']} s</strong></td>
             <td>
             <div class="proportion">
-            <meter min="0" max="100" value="{m['speech_percentage']:.8f}" aria-label="Part du temps de parole, minute {m['minute']}"></meter>
-            <span>{format_number(m['speech_percentage'])} %</span>
+                <meter min="0" max="100" value="{m['speech_percentage']:.8f}" aria-label="Part du temps de parole, minute {m['minute']}"></meter>
+                <span>{format_number(m['speech_percentage'])} %</span>
             </div></td></tr>
             ''')
         
