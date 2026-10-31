@@ -14,7 +14,7 @@ def reject_duplicate_keys(pairs):
     return result
 
 
-def load_interview(path):
+def load_interview(path, endpoint=None):
     """Charge les données UTF-8 ; refuse les clés répétées et les JSON mal formés."""
     try:
         with open(Path(path).expanduser(), encoding="utf-8") as file:
@@ -23,7 +23,7 @@ def load_interview(path):
     except json.JSONDecodeError as error:
         raise ValueError(f"JSON invalide, ligne {error.lineno}, colonne {error.colno} : {error.msg}") from error
     
-    return validate_interview(data)
+    return validate_interview(data, endpoint)
 
 class TimeStamp:
     time: int
@@ -128,19 +128,19 @@ class ExcludedIntervals:
     OPTIONAL = set(('note',))
 
     @classmethod
-    def process_timecode(self, data, line, output: list, interview_interval: Interval):
-        location = f'Element numéro {line} du champs {self.name}'
-        if 'note' in data:
-            is_str(data['note'], f'note de : {location}')
+    def check_timecode(self, data, interview_interval: Interval):
+        for line, interval in enumerate(data[self.name]):
+            location = f'Element numéro {line} du champs {self.name}'
 
-        start = TimeStamp(data['start'])
-        end   = TimeStamp(data['end'])
+            if 'note' in interval:
+                is_str(interval['note'], f'note de : {location}')
 
-        if start < interview_interval.start or end > interview_interval.end:
-            raise ValueError(f"{line} : intervalle hors de la durée de l'interview")
+            start = TimeStamp(interval['start'])
+            end   = TimeStamp(interval['end'])
 
-        output.append(Interval(start=start, end=end))
-    
+            if start < interview_interval.start or end > interview_interval.end:
+                raise ValueError(f"{line} : intervalle hors de la durée de l'interview")
+        
 class SpeechIntervals:
     name = "speech_intervals"
     subtype = dict
@@ -148,26 +148,22 @@ class SpeechIntervals:
     OPTIONAL = set(('include', 'note',))
 
     @classmethod
-    def process_timecode(self, data, line, output: dict, interview_interval: Interval):
-        location = f'Element numéro {line} du champs {self.name}'
-        if 'note' in data:
-            is_str(data['note'], f'note de : {location}')
+    def check_timecode(self, data, interview_interval: Interval):
+        for line, interval in enumerate(data[self.name]):
+            location = f'Element numéro {line} du champs {self.name}'
+            if 'note' in interval:
+                is_str(interval['note'], f'note de : {location}')
 
-        start = TimeStamp(data['start'])
-        end   = TimeStamp(data['end'])
+            start = TimeStamp(interval['start'])
+            end   = TimeStamp(interval['end'])
 
-        if start < interview_interval.start or end > interview_interval.end:
-            raise ValueError(f"{line} : intervalle hors de la durée de l'interview")
+            if start < interview_interval.start or end > interview_interval.end:
+                raise ValueError(f"{line} : intervalle hors de la durée de l'interview")
 
-        is_str(data['speaker'], f'speaker de : {line}')
-                                        
-        if type(data.get('include', True)) is not bool:
-            raise ValueError(f'{line}.include : true ou false est attendu.')
-        
-        if not data.get('include', True):
-            return
-    
-        output.setdefault(data['speaker'], []).append(Interval(start=start, end=end))
+            is_str(interval['speaker'], f'speaker de : {line}')
+                                            
+            if type(interval.get('include', True)) is not bool:
+                raise ValueError(f'{line}.include : true ou false est attendu.')
 
 class InterruptionCounts:
     name = "interruption_counts"
@@ -176,17 +172,28 @@ class InterruptionCounts:
     OPTIONAL = set(('note',))
 
     @classmethod
-    def process_timecode(self, data, line, output: list, interview_interval: Interval):
-        location = f'Element numéro {line} du champs {self.name}'
-        if 'note' in data:
-            is_str(data['note'], f'note de : {location}')
-    
-        time = TimeStamp(data['time'])
-        count = data['count']
+    def check_timecode(self, data, interview_interval: Interval):
 
-        if not interview_interval.start <= time <= interview_interval.end or type(count) is not int or count < 0:
-            raise ValueError(f'{location} : horodatage hors limites ou cumul non entier positif ou nul.')
-        output.append((time, count))
+        checkpoints = []
+        for line, interval in enumerate(data[self.name]):
+            location = f'Element numéro {line} du champs {self.name}'
+            if 'note' in interval:
+                is_str(interval['note'], f'note de : {location}')
+        
+            time = TimeStamp(interval['time'])
+            count = interval['count']
+
+            if not interview_interval.start <= time <= interview_interval.end or type(count) is not int or count < 0:
+                raise ValueError(f'{location} : horodatage hors limites ou cumul non entier positif ou nul.')
+            checkpoints.append((time.time, count))
+
+        checkpoints.sort()
+        if len(checkpoints) < 2 or checkpoints[0] != (interview_interval.start.time, 0) or checkpoints[-1][0] != interview_interval.end.time:
+            raise ValueError('interruption_counts : renseigner zéro au début et le cumul total à la fin.')
+        
+        for previous, following in zip(checkpoints, checkpoints[1:]):
+            if previous[0] == following[0] or previous[1] > following[1]:
+                raise ValueError('interruption_counts : horodatages uniques et cumuls croissants ou égaux requis.')
 
 class Notes:
     name = "notes"
@@ -208,7 +215,7 @@ def is_str(value, label):
         raise ValueError(f"{label} : une chaîne de caractères non vide est attendue.")
 
 
-def validate_interview(data):
+def validate_interview(data, endpoint=None):
 
     # Tests des champs dans des données d'entrée
     check_fields(data, JsonFields)
@@ -223,39 +230,24 @@ def validate_interview(data):
 
     [is_str(note, f'note numéro {index}') for index, note in enumerate(data.get('notes', []))]
 
-    check_fields(data['interview'], Interview)
+    check_fields(data[Interview.name], Interview)
     [check_fields(element, ExcludedIntervals, comment=f'numéro {index}')  
-     for index, element in enumerate(data['excluded_intervals'])]
+     for index, element in enumerate(data[ExcludedIntervals.name])]
     [check_fields(element, SpeechIntervals, comment=f'numéro {index}')
-     for index, element in enumerate(data['speech_intervals'])]
+     for index, element in enumerate(data[SpeechIntervals.name])]
     [check_fields(element, InterruptionCounts, comment=f'numéro {index}')
-     for index, element in enumerate(data['interruption_counts'])]
+     for index, element in enumerate(data[InterruptionCounts.name])]
 
     # Test et des timecode du format des données
-    start = TimeStamp(data['interview']['start'])
-    end   = TimeStamp(data['interview']['end'])
-    tot_interval = Interval(start=start, end=end)
+    start = TimeStamp(data[Interview.name]['start'])
+    end = TimeStamp(data[Interview.name]['end']) if endpoint is None else TimeStamp(endpoint)
+    interview_interval = Interval(start=start, end=end)
 
-    if end <= start:
+    if interview_interval.duration().time <= 0:
         raise ValueError('interview : la fin doit être après le début.')
 
-    excluded = []
-    checkpoints = []
-    speech_by_speaker = {}
-    for field, output in zip(
-        (ExcludedIntervals, SpeechIntervals, InterruptionCounts), 
-        (excluded, speech_by_speaker, checkpoints)):
-
-        for index, interval in enumerate(data[field.name]):
-            field.process_timecode(interval, line=index, output=output, interview_interval=tot_interval)
-
-    #checkpoints.sort()
-    #if len(checkpoints) < 2 or checkpoints[0] != (start, 0) or checkpoints[-1][0] != end:
-    #    raise ValueError('interruption_counts : renseigner zéro au début et le cumul total à la fin.')
-    
-    #for previous, following in zip(checkpoints, checkpoints[1:]):
-    #    if previous[0] == following[0] or previous[1] > following[1]:
-    #        raise ValueError('interruption_counts : horodatages uniques et cumuls croissants ou égaux requis.')
+    for field in (ExcludedIntervals, SpeechIntervals, InterruptionCounts):
+        field.check_timecode(data, interview_interval=interview_interval)
         
     return data
 
@@ -270,7 +262,7 @@ def main():
     args = parser.parse_args()
 
     try:
-        data = load_interview(args.input_file)
+        data = load_interview(args.input_file, args.timestamp)
         result = analyze(data, args.timestamp)
 
         

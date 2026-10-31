@@ -10,10 +10,6 @@ def interview_interval(data) -> Interval:
 
 def analysis_interval(interview: Interval, endpoint=None) -> Interval:
     end = interview.end if endpoint is None else TimeStamp(endpoint)
-
-    if not interview.start <= end <= interview.end:
-        raise ValueError(f'L’horodatage [endpoint] doit être compris entre {interview.start.format_duration()} et {interview.end.format_duration()}.')
-    
     return Interval(interview.start, end)
 
 
