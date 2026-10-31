@@ -171,7 +171,7 @@ def build_chart_data(analysis, active_segments, excluded, video_speech, checkpoi
 def build_analysis_result(data, interview, analysis, duration, effective_speech, previous, 
                           following, minutes, warnings, omitted_count, chart_data):
     
-    total_speech = sum(interval.duration().time for interval in effective_speech)
+    total_speech = sum(interval.duration() for interval in effective_speech)
 
     return {
         'title': data.get('title', 'Analyse de l’interview'),
@@ -189,8 +189,8 @@ def build_analysis_result(data, interview, analysis, duration, effective_speech,
                                  'count': following.count},
         'minimum_interruptions_per_minute': previous.count * 60 / duration.end.time if duration.end.time > 0 else None,
         'maximum_interruptions_per_minute': following.count * 60 / duration.end.time if duration.end.time > 0 else None,
-        'total_speech_seconds': total_speech,
-        'speech_percentage': 100 * total_speech / duration.end.time if duration.end.time > 0 else None,
+        'total_speech_seconds': total_speech.format_duration(),
+        'speech_percentage': 100 * total_speech.time / duration.end.time if duration.end.time > 0 else None,
         'speech_by_minute': minutes, 
         'excluded_speech_count': omitted_count,
         'warnings': warnings, 
