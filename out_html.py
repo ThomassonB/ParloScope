@@ -37,7 +37,11 @@ def generate_html(result):
         
     table = ''.join(rows)
     #notes = ''.join(f'<li>{escape(note)}</li>' for note in result.warnings)
-    template_path = Path(__file__).resolve().with_name('report_template.html')
+    template_path = (
+                    Path(__file__).resolve().parent
+                    / "rendu"
+                    / "rapport_modele.html"
+                )
 
     template = Template(template_path.read_text(encoding='utf-8'))
 

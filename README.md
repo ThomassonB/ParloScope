@@ -35,7 +35,7 @@ python read_interview.py <input_file> [-o <output_file>]
 | Argument ou option | Description |
 |---|---|
 | `<input_file>` | Chemin du fichier JSON contenant les données de l’interview (obligatoire). |
-| `-o [output_file]` | Génère le rapport HTML au chemin indiqué. Si l’option est absente ou fournie sans chemin, utilise `rapport_parloscope.html` dans le dossier courant. |
+| `-o [output_file]` | Génère le rapport HTML au chemin indiqué. Si l’option est absente ou fournie sans chemin, utilise `rapport_parloscope.html` dans le dossier `rendu`. |
 
 Les éléments entre `<.>` sont à remplacer par vos valeurs. Les éléments entre `[.]` sont facultatifs. Ces délimiteurs ne doivent pas être saisis.
 
@@ -52,11 +52,11 @@ Version simplifiée :
 ```bash
 python read_interview.py interview_francetv_marie_dupont.json
 ```
-Vous trouverez le compte rendu dans `rapport_parloscope.html`
+Vous trouverez le compte rendu dans `rendu/rapport_parloscope.html`
 
 ## Format JSON d’entrée
 
-Vous pouvez trouver un exemple minimal dans interview_template.json. Ce fichier représente votre relevé d'horodotage. Si vous avez noté sur un carnet, vous pouvez reporter votre horodotage dans ce fichier.
+Vous pouvez trouver un exemple minimal dans `rendu/interview_template.json`. Ce fichier représente votre relevé d'horodotage. Si vous avez noté sur un carnet, vous pouvez reporter votre horodotage dans ce fichier.
 
 ### Description des champs du json
 

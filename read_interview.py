@@ -316,15 +316,23 @@ def main():
 
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('input_file', help="Fichier de données JSON")
-    parser.add_argument('-o', '--output', nargs='?', const='rapport_interview.html', default='rapport_interview.html', metavar='FILE', help="Chemin du rapport HTML.")
+    parser.add_argument('-o', '--output', nargs='?', default=None, metavar='FILE', help="Chemin du rapport HTML.")
     args = parser.parse_args()
 
     try:
         data = load_interview(args.input_file)
         result = get_result(data)
 
-        
-        output_path = Path(args.output or 'rapport_parloscope.html').expanduser()
+        if args.output is None:
+            output_path = (
+                Path(__file__).resolve().parent
+                / "rendu"
+                / "rapport_parloscope.html"
+            )
+        else:
+            output_path = Path(args.output).expanduser()
+
+        output_path.parent.mkdir(parents=True, exist_ok=True)
 
         if output_path.resolve() == Path(args.input_file).expanduser().resolve():
             raise ValueError("Le rapport ne doit pas écraser le fichier d’entrée.")
