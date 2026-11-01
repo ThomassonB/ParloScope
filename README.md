@@ -1,6 +1,6 @@
 # Analyse d’interview depuis un fichier JSON
 
-Un outil Python pour visualiser le temps de parole, les interruptions et leur évolution pendant une interview, une réunion ou un débat. Python 3, sans dépendance supplémentaire. Le rendu HTML/CSS et les graphiques SVG ont été codés par IA.
+Un outil Python pour visualiser le temps de parole, les interruptions et leur évolution pendant une interview, une réunion ou un débat. Python 3, sans dépendance supplémentaire. Le rendu CSS et les graphiques SVG ont été codés par IA parce que j'ai autre chose à faire de ma vie.
 
 ## Méthodologie
 
