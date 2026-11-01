@@ -101,7 +101,7 @@ thead {
     color:white;
 }
 th,td {
-    padding:14px 18px;
+    padding:4px 18px;
     text-align:left;
 }
 tbody th {
@@ -148,6 +148,28 @@ li {
     font-size:.85rem;
     color:#526177;
 }
+
+.chart-card {
+    background: white;
+    border: 1px solid #dce3eb;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    height: auto;
+}
+
+.chart-card h2 {
+    margin: 0 0 8px;
+}
+
+.chart-description {
+    margin: 0 0 16px;
+}
+
+.chart-scroll {
+    overflow-x: auto;
+}
+
 @media(max-width:800px) {
     .cards {
         grid-template-columns:repeat(2,minmax(0,1fr));

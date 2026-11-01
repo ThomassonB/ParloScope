@@ -14,7 +14,7 @@ def reject_duplicate_keys(pairs):
     return result
 
 
-def load_interview(path, endpoint=None):
+def load_interview(path):
     """Charge les données UTF-8 ; refuse les clés répétées et les JSON mal formés."""
     try:
         with open(Path(path).expanduser(), encoding="utf-8") as file:
@@ -23,7 +23,7 @@ def load_interview(path, endpoint=None):
     except json.JSONDecodeError as error:
         raise ValueError(f"JSON invalide, ligne {error.lineno}, colonne {error.colno} : {error.msg}") from error
     
-    return validate_interview(data, endpoint)
+    return validate_interview(data)
 
 class TimeStamp:
     time: int
@@ -49,12 +49,18 @@ class TimeStamp:
     @classmethod
     def from_seconds(cls, seconds) -> 'TimeStamp':
         if type(seconds) is not int or seconds < 0:
-            raise ValueError('Le temps doit être un entier positif ou nul en secondes.')
+            raise Exception #('Le temps doit être un entier positif ou nul en secondes.')
         
         instance = object.__new__(cls)
         object.__setattr__(instance, 'time', seconds)
         return instance
 
+    def __str__(self):
+        return f"TimeStamp({self.time}, {self.format()})"
+
+    def __repr__(self):
+        return self.__str__()
+    
     def __sub__(self, other):
         if not isinstance(other, TimeStamp):
             return NotImplemented
@@ -68,7 +74,11 @@ class TimeStamp:
     def __radd__(self, other): # for sum(TimeStamp)
         if not isinstance(other, int) or other != 0:
             return NotImplemented
-        return self
+        
+        if other == 0:
+            return self
+        else:
+            return self.__add__(other)
 
     def __lt__(self, other):
         if not isinstance(other, TimeStamp):
@@ -90,7 +100,7 @@ class TimeStamp:
             return NotImplemented
         return self.time >= other.time
         
-    def format_duration(self):
+    def format(self):
         hours, remainder = divmod(self.time, 3600)
         minutes, seconds = divmod(remainder, 60)
         return f"{hours}:{minutes:02d}:{seconds:02d}"
@@ -99,6 +109,21 @@ class Interval(NamedTuple):
     start: TimeStamp
     end: TimeStamp
 
+    def __str__(self):
+        return f"Interval({self.start}, {self.end})"
+
+    def __repr__(self):
+            return self.__str__()
+
+    def __add__(self, other) -> TimeStamp:
+        if not isinstance(other, Interval):
+            return NotImplemented
+        return self.duration() + other.duration()
+
+    @staticmethod
+    def sum(intervals) -> TimeStamp:
+        return sum(interval.duration() for interval in intervals)
+
     def duration(self) -> TimeStamp:
         return self.end - self.start
 
@@ -106,7 +131,39 @@ class Interval(NamedTuple):
         if not isinstance(other, Interval):
             return NotImplemented
         start, end = max(self.start, other.start), min(self.end, other.end)
-        return Interval(start, end) if start < end else None
+
+        if start >= end:
+            start = TimeStamp.from_seconds(0)
+            end = start
+
+        return Interval(start, end)
+
+    def substract(self, other):
+        if self.start <= other.start and self.end >= other.end:
+            return Interval(self.start, other.start), Interval(other.end, self.end)
+        
+        if other.end <= self.start or other.start >= self.end:
+            return self, 
+
+        if self.start < other.start and self.end <= other.end:
+            return Interval(self.start, other.start), 
+
+        if other.start <= self.start and other.end < self.end:
+            return Interval(other.end, self.end), 
+
+        zero = TimeStamp.from_seconds(0)
+        return Interval(zero, zero), 
+
+    def made_in_heaven(self, time: TimeStamp):
+        """Recule l'intervale dans le temps"""
+        return Interval(self.start - time, self.end - time)
+        
+
+    def overlap_time(self, other) -> TimeStamp:
+        return self.intersection(other).duration()
+
+    def serialize(self):
+        return {'start': self.start.time, 'end': self.end.time}
 
 class InterruptionCheckpoint(NamedTuple):
     time: TimeStamp
@@ -217,7 +274,7 @@ def is_str(value, label):
         raise ValueError(f"{label} : une chaîne de caractères non vide est attendue.")
 
 
-def validate_interview(data, endpoint=None):
+def validate_interview(data):
 
     # Tests des champs dans des données d'entrée
     check_fields(data, JsonFields)
@@ -242,7 +299,7 @@ def validate_interview(data, endpoint=None):
 
     # Test et des timecode du format des données
     start = TimeStamp(data[Interview.name]['start'])
-    end = TimeStamp(data[Interview.name]['end']) if endpoint is None else TimeStamp(endpoint)
+    end = TimeStamp(data[Interview.name]['end'])
     interview_interval = Interval(start=start, end=end)
 
     if interview_interval.duration().time <= 0:
@@ -254,18 +311,17 @@ def validate_interview(data, endpoint=None):
     return data
 
 def main():
-    from analyse import analyze
+    from prepare_result import get_result
     from out_html import generate_html
 
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('input_file', help="Fichier de données JSON")
-    parser.add_argument('timestamp', nargs='?', help="Borne vidéo M:SS ou H:MM:SS ; par défaut, la fin de l’interview.")
     parser.add_argument('-o', '--output', nargs='?', const='rapport_interview.html', default='rapport_interview.html', metavar='FILE', help="Chemin du rapport HTML.")
     args = parser.parse_args()
 
     try:
-        data = load_interview(args.input_file, args.timestamp)
-        result = analyze(data, args.timestamp)
+        data = load_interview(args.input_file)
+        result = get_result(data)
 
         
         output_path = Path(args.output or 'rapport_parloscope.html').expanduser()

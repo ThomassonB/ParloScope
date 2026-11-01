@@ -8,7 +8,7 @@
   "speech_intervals": [
     {"speaker": "guest", "start": "0:10", "end": "0:35"},
     {"speaker": "host", "start": "0:30", "end": "0:45"},
-    {"speaker": "guest", "start": "1:20", "end": "1:50", "include": true, "note": "Ceci est une note."}
+    {"speaker": "guest", "start": "1:20", "end": "1:50", "note": "Ceci est une note."}
   ],
   "interruption_counts": [
     {"time": "0:00", "count": 0},

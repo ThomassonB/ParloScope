@@ -29,23 +29,22 @@ L’analyse humaine reste à mon sens nécessaire pour appliquer ces critères. 
 ### Arguments
 
 ```bash
-python read_interview.py <input_file> [endpoint] [-o <output_file>]
+python read_interview.py <input_file> [-o <output_file>]
 ```
 
 | Argument ou option | Description |
 |---|---|
 | `<input_file>` | Chemin du fichier JSON contenant les données de l’interview (obligatoire). |
-| `[endpoint]` | Horodatage vidéo jusqu’auquel calculer les statistiques, au format `M:SS` ou `H:MM:SS`. Facultatif : sans cette valeur, toute l’interview est analysée. |
 | `-o [output_file]` | Génère le rapport HTML au chemin indiqué. Si l’option est absente ou fournie sans chemin, utilise `rapport_parloscope.html` dans le dossier courant. |
 
 Les éléments entre `<.>` sont à remplacer par vos valeurs. Les éléments entre `[.]` sont facultatifs. Ces délimiteurs ne doivent pas être saisis.
 
 ### Exemple
 
-Pour analyser l’interview jusqu’à l’horodatage vidéo `12:00` et enregistrer le rapport HTML :
+Pour analyser l’interview et enregistrer le rapport HTML :
 
 ```bash
-python read_interview.py interview_francetv_marie_dupont.json 12:00 -o rapport_francetv_marie_dupont.html
+python read_interview.py interview_francetv_marie_dupont.json -o rapport_francetv_marie_dupont.html
 ```
 
 Version simplifiée : 
@@ -67,14 +66,14 @@ Vous pouvez trouver un exemple minimal dans interview_template.json. Ce fichier 
 | `interview.start`, `interview.end` | Horodatages obligatoires (format H:MM:SS) ; la fin doit être après le début. |
 | `target_speaker` | Identifiant de la personne dont on mesure le temps de parole. |
 | `excluded_intervals` | Liste obligatoire, éventuellement vide. Chaque entrée contient `start`, `end` et éventuellement un un commentaire `label`. Ces périodes sont retirées de la durée et des prises de parole (temps de pause). |
-| `speech_intervals` | Liste obligatoire. Chaque entrée contient `speaker`, `start`, `end`, éventuellement `include` pour comptabiliser ou non ce temps et `note` pour commentaire sur ce temps. L’absence de `include` équivaut à `true`. |
+| `speech_intervals` | Liste obligatoire. Chaque entrée contient `speaker`, `start`, `end` et `note` pour un commentaire sur ce temps. |
 | `interruption_counts` | Liste de cumuls `count` associés au dénombrement d'interruptions à un instant `time`, avec éventuellement une `note`. Ce sont les interruptions de la personne cible, comptées depuis le début de l’interview. Par exemple, sont comptées comme une interruption un changement de sujet forcé qui empêche la personne de finir son propos ou de répondre totalement à une question. Une interruption de parole peut aussi être liée à un brouhaha de personnes scandalisées qui bordélise l'interview ou le débat en cours. |
 | `notes` | Liste facultative de textes libres. |
 
 ### Horodatages et intervalles
 
 - Utiliser le format `M:SS` ou `H:MM:SS` (ce qu'il y a sur YouTube), par exemple `"12:03"` ou `"1:02:03"`. Les nombres seuls et les fractions de seconde ne sont pas acceptés.
-- Tous les temps sont des positions dans la vidéo d’origine, y compris après les interludes.
+- Tous les temps sont des positions dans la vidéo d’origine, y compris après les pauses.
 - Les pauses ne doivent pas se chevaucher. 
 - Les prises de parole d’une même personne ne doivent pas se chevaucher non plus.
 - Les chevauchements entre personnes différentes sont autorisés.
@@ -84,20 +83,3 @@ Vous pouvez trouver un exemple minimal dans interview_template.json. Ce fichier 
 ### Cumuls d’interruptions
 
 Renseigner obligatoirement un cumul de `0` au temps associé à `interview.start` et le total à `interview.end`. Les autres points sont facultatifs. Les horodatages doivent être uniques ; les cumuls sont des entiers positifs ou nuls en ordre croissant. Idéalement il faudrait relever tous les instants où une interruption se passe pour vérifier la comptabilité. Comme certaines interview peuvent être une purge à écouter, on peut compter les interruptions et relever leur nombre cumulé à un instant donné.
-
-
-### Ligne incertaine ou incorrecte
-
-Le script conserve l’intervalle initial erroné sans le compter. Dans le champs `speech_intervals`, vous pouvez retirer un horodotage du calcul :
-
-```json
-{
-  "speaker": "guest",
-  "start": "10:58",
-  "end": "10:06",
-  "include": false,
-  "note": "Fin à vérifier dans la vidéo."
-}
-```
-
-Corrigez le champs `end`, puis passez `include` à `true` après vérification. Une ligne exclue doit garder des horodatages syntaxiquement valides, mais peut conserver une fin antérieure au début. Elle est signalée dans le rapport si son début précède l’instant analysé.
