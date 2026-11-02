@@ -24,6 +24,7 @@ class Result:
         self.disruptions = get_disruptions(data)
 
         self.normalise()
+        self.fill_disruption()
 
         # self.warnings = collect_warnings(data, analysis, speech, previous, following)
 
@@ -82,6 +83,15 @@ class Result:
                 self.speaker_time.remove(speech)
                 
         self.speaker_time = sorted(self.speaker_time)
+
+    def fill_disruption(self):
+        sorted_dis = sorted(self.disruptions)
+        if sorted_dis[0].time != self.duration.start:
+            self.disruptions.insert(0, InterruptionCheckpoint(time=self.duration.start, count=0))
+
+        if sorted_dis[-1].time != self.duration.end:
+            self.disruptions.append(InterruptionCheckpoint(time=self.duration.end, count=sorted_dis[-1].count))
+
 
 
 def merge_intervals(intervals) -> list[Interval]:

@@ -133,17 +133,16 @@ def interruptions_chart(result):
 
     excluded_shading(parts, result.breaks, x)
 
-    for index, point in enumerate(points):
+    for point in points:
         px, py = x(point.time.time), y(point.count)
         parts.append(
             f'''
-            <circle cx="{px:.2f}" cy="{py:.2f}" r="5" fill="#405c94" stroke="white" stroke-width="1">
-            <title>{point.time.format()} : {point.count} interruptions</title>
-            </circle>''')
+            <circle cx="{px:.2f}" cy="{py:.2f}" r="5" fill="#405c94" stroke="white" stroke-width="1"></circle>''')
+            # <title>{point.time.format()} : {point.count} interruptions</title>
         
         # Décaler les deux derniers libellés lorsque leurs points sont proches.
-        anchor = 'end' if index + 1 < len(points) and x(points[index + 1].time.time) - px < 40 else 'start'
-        parts.append(text(px + (-8 if anchor == 'end' else 8), py - 10, point.count, anchor, '#314c80'))
+        # anchor = 'end' if index + 1 < len(points) and x(points[index + 1].time.time) - px < 40 else 'start'
+        # parts.append(text(px + (-8 if anchor == 'end' else 8), py - 10, point.count, anchor, '#314c80'))
     
     parts.append('</svg>')
     return title, description, ''.join(parts)

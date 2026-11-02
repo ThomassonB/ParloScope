@@ -29,30 +29,23 @@ L’analyse humaine reste à mon sens nécessaire pour appliquer ces critères. 
 ### Arguments
 
 ```bash
-python read_interview.py <input_file> [-o <output_file>]
+python read_interview.py <input_file>
 ```
 
 | Argument ou option | Description |
 |---|---|
 | `<input_file>` | Chemin du fichier JSON contenant les données de l’interview (obligatoire). |
-| `-o [output_file]` | Génère le rapport HTML au chemin indiqué. Si l’option est absente ou fournie sans chemin, utilise `rapport_parloscope.html` dans le dossier `rendu`. |
 
-Les éléments entre `<.>` sont à remplacer par vos valeurs. Les éléments entre `[.]` sont facultatifs. Ces délimiteurs ne doivent pas être saisis.
+Les éléments entre `<.>` sont à remplacer par vos valeurs. Ces délimiteurs ne doivent pas être saisis. Le rapport est créé dans le dossier `rendu`, son nom est le même que le fichier `.json` en entrée.
 
 ### Exemple
 
-Pour analyser l’interview et enregistrer le rapport HTML :
+Dans le répertoire du script : 
 
 ```bash
-python read_interview.py interview_francetv_marie_dupont.json -o rapport_francetv_marie_dupont.html
+python read_interview.py vos_donnees.json
 ```
-
-Version simplifiée : 
-
-```bash
-python read_interview.py interview_francetv_marie_dupont.json
-```
-Vous trouverez le compte rendu dans `rendu/rapport_parloscope.html`
+Vous trouverez le compte rendu dans `rendu/vos_donnees.html`.
 
 ## Format JSON d’entrée
 
@@ -73,13 +66,9 @@ Vous pouvez trouver un exemple minimal dans `rendu/interview_template.json`. Ce 
 ### Horodatages et intervalles
 
 - Utiliser le format `M:SS` ou `H:MM:SS` (ce qu'il y a sur YouTube), par exemple `"12:03"` ou `"1:02:03"`. Les nombres seuls et les fractions de seconde ne sont pas acceptés.
-- Tous les temps sont des positions dans la vidéo d’origine, y compris après les pauses.
-- Les pauses ne doivent pas se chevaucher. 
-- Les prises de parole d’une même personne ne doivent pas se chevaucher non plus.
-- Les chevauchements entre personnes différentes sont autorisés.
+- Les chevauchements entre temps de parole ne sont pas comptées double.
 - Un temps de parole qui traverse une pause est automatiquement découpé pour exclure la partie située dans la pause (pas de triche).
-- Les périodes sans prise de parole renseignée ne sont pas attribuées à la personne cible. Un relevé incomplet donne donc un temps de parole sous-estimé.
 
 ### Cumuls d’interruptions
 
-Renseigner obligatoirement un cumul de `0` au temps associé à `interview.start` et le total à `interview.end`. Les autres points sont facultatifs. Les horodatages doivent être uniques ; les cumuls sont des entiers positifs ou nuls en ordre croissant. Idéalement il faudrait relever tous les instants où une interruption se passe pour vérifier la comptabilité. Comme certaines interview peuvent être une purge à écouter, on peut compter les interruptions et relever leur nombre cumulé à un instant donné.
+Les horodatages doivent être uniques ; les cumuls sont des entiers positifs ou nuls en ordre croissant. Idéalement il faudrait relever tous les instants où une interruption se passe pour vérifier la comptabilité. Comme certaines interview peuvent être une purge à écouter, on peut compter les interruptions et relever leur nombre cumulé à un instant donné.

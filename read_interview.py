@@ -99,6 +99,11 @@ class TimeStamp:
         if not isinstance(other, TimeStamp):
             return NotImplemented
         return self.time >= other.time
+
+    def __neq__(self, other):
+        if not isinstance(other, TimeStamp):
+            return NotImplemented
+        return self.time != other.time
         
     def format(self):
         hours, remainder = divmod(self.time, 3600)
@@ -223,8 +228,8 @@ class SpeechIntervals:
 
             is_str(interval['speaker'], f'speaker de : {line}')
                                             
-            if type(interval.get('include', True)) is not bool:
-                raise ValueError(f'{line}.include : true ou false est attendu.')
+            #if type(interval.get('include', True)) is not bool:
+            #    raise ValueError(f'{line}.include : true ou false est attendu.')
 
 class InterruptionCounts:
     name = "interruption_counts"
@@ -235,7 +240,7 @@ class InterruptionCounts:
     @classmethod
     def check_timecode(self, data, interview_interval: Interval):
 
-        checkpoints = []
+        # checkpoints = []
         for line, interval in enumerate(data[self.name]):
             location = f'Element numéro {line} du champs {self.name}'
             if 'note' in interval:
@@ -246,15 +251,17 @@ class InterruptionCounts:
 
             if not interview_interval.start <= time <= interview_interval.end or type(count) is not int or count < 0:
                 raise ValueError(f'{location} : horodatage hors limites ou cumul non entier positif ou nul.')
-            checkpoints.append((time.time, count))
+            # checkpoints.append((time.time, count))
 
-        checkpoints.sort()
-        if len(checkpoints) < 2 or checkpoints[0] != (interview_interval.start.time, 0) or checkpoints[-1][0] != interview_interval.end.time:
-            raise ValueError('interruption_counts : renseigner zéro au début et le cumul total à la fin.')
-        
-        for previous, following in zip(checkpoints, checkpoints[1:]):
-            if previous[0] == following[0] or previous[1] > following[1]:
-                raise ValueError('interruption_counts : horodatages uniques et cumuls croissants ou égaux requis.')
+        # checkpoints.sort()
+        # if checkpoints[0] != (interview_interval.start.time, 0):
+        #    checkpoints.insert(0, (time.time, count))
+        #if len(checkpoints) < 2 or checkpoints[0] != (interview_interval.start.time, 0) or checkpoints[-1][0] != interview_interval.end.time:
+        #    raise ValueError('interruption_counts : renseigner zéro au début et le cumul total à la fin.')
+        #
+        #for previous, following in zip(checkpoints, checkpoints[1:]):
+        #    if previous[0] == following[0] or previous[1] > following[1]:
+        #        raise ValueError('interruption_counts : horodatages uniques et cumuls croissants ou égaux requis.')
 
 class Notes:
     name = "notes"
@@ -318,26 +325,26 @@ def main():
 
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('input_file', help="Fichier de données JSON")
-    parser.add_argument('-o', '--output', nargs='?', default=None, metavar='FILE', help="Chemin du rapport HTML.")
+    #parser.add_argument('-o', '--output', nargs='?', default=None, metavar='FILE', help="Chemin du rapport HTML.")
     args = parser.parse_args()
 
     try:
         data = load_interview(args.input_file)
         result = get_result(data)
 
-        if args.output is None:
-            output_path = (
-                Path(__file__).resolve().parent
-                / "rendu"
-                / "rapport_parloscope.html"
-            )
-        else:
-            output_path = Path(args.output).expanduser()
+        #if args.output is None:
+        output_path = (
+            Path(__file__).resolve().parent
+            / "rendu"
+            / Path(args.input_file).with_suffix(".html").name
+        )
+        #else:
+        #    output_path = Path(args.output).expanduser()
 
-        output_path.parent.mkdir(parents=True, exist_ok=True)
+        # output_path.parent.mkdir(parents=True, exist_ok=True)
 
-        if output_path.resolve() == Path(args.input_file).expanduser().resolve():
-            raise ValueError("Le rapport ne doit pas écraser le fichier d’entrée.")
+        #if output_path.resolve() == Path(args.input_file).expanduser().resolve():
+        #    raise ValueError("Le rapport ne doit pas écraser le fichier d’entrée.")
         
         output_path.write_text(generate_html(result), encoding='utf-8')
         print(f"Rapport HTML créé : {output_path.resolve()}")
