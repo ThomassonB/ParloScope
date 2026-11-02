@@ -18,6 +18,7 @@ def generate_html(result):
 
     if not result.speaker_time:
         percentage_speech = 'Non définie'
+
     percentage_speech = 100 * sum(speech.duration() for speech in result.speaker_time).time / effective_duration.time
     
     rows = []

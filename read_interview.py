@@ -122,6 +122,8 @@ class Interval(NamedTuple):
 
     @staticmethod
     def sum(intervals) -> TimeStamp:
+        if not intervals:
+            return TimeStamp.from_seconds(0)
         return sum(interval.duration() for interval in intervals)
 
     def duration(self) -> TimeStamp:
