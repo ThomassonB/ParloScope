@@ -40,7 +40,6 @@ def generate_html(result):
     #notes = ''.join(f'<li>{escape(note)}</li>' for note in result.warnings)
     template_path = (
                     Path(__file__).resolve().parent
-                    / "rendu"
                     / "rapport_modele.html"
                 )
 

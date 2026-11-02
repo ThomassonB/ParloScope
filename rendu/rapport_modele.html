@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>${title}</title>
+    <link href="rapport.css" rel="stylesheet">
+    </head>
+<body>
+<main>
+    <div class="eyebrow">${title}</div>
+    <h1>Statistiques sur ${interview_duration} minutes réelles</h1>
+    <p class="intro">De ${start} à ${end}. Temps de pause retranché : <strong>${break_time}s</strong>.</p>
+    <section class="cards" aria-label="Statistiques principales">
+        <article class="card">
+        <h2>Durée hors pause</h2>
+        <p class="value">${interview_duration}</p>
+        </article>
+        <article class="card">
+            <h2>Interruptions par minute</h2>
+            <p class="value">${disruption_rate}</p>
+            <p class=""detail>${count} interruptions</p>
+        </article>
+        <article class="card">
+            <h2>Temps de parole relevé</h2>
+            <p class="value">${total_speech}</p>
+        </article>
+        <article class="card">
+            <h2>Part du temps de parole</h2>
+            <p class="value">${percentage_speech}%</p>
+        </article>
+    </section>
+    ${charts}
+    <h2>Temps de parole pour chaque minute d’interview</h2>
+    <p class="legend">Chaque ligne mesure le temps de parole pendant la n-ème minute, sans compter les pauses, calculé sur le temps réel de l’interview (à partir ${start}).</p>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                <th scope="col">Minute</th>
+                <th scope="col">Temps de parole</th>
+                <th scope="col">Part de parole</th>
+                </tr>
+            </thead>
+            <tbody>${table_rows}</tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>
